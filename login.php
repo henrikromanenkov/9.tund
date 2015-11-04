@@ -56,7 +56,14 @@
 				$hash = hash("sha512", $log_password);
 				
 				//kasutaja sisselogimise funktsioon failist function.php
-				$User->loginUser($log_email, $hash);
+				$login_response = $User->loginUser($log_email, $hash);
+				
+				//kasutaja logis edukalt sisse
+				if(isset($login_response->success)){
+					
+					//id, email
+					
+				}
 				
 
 				// login if end	
@@ -95,7 +102,8 @@
 				
 				//kasutaja sisselogimise funktsioon failist function.php
 				// fn User klassist
-				$User->createUser($user_email, $hash);
+				echo "siin";
+				$create_response = $User->createUser($user_email, $hash);
 				
 				
 				echo "Võib kasutajat luua! Kasutajanimi on ".$user_email." ja parool on ".$user_password. "ja räsi on" .$hash;
@@ -157,6 +165,19 @@
 <body>
 	
 	<h2>Log in</h2>
+	
+	
+	<?php if(isset($login_response->error)): ?>
+	
+		<p style="color:red;"> <?=$login_response->error->message;?> </p>
+		
+	<?php elseif(isset($login_response->success)): ?>
+	
+		<p style="color:green;"> <?=$login_response->success->message;?> </p>
+	
+	<?php endif; ?>
+	
+	
 		<form action="login.php" method="post">
 			<input name="log_email" type="email" placeholder="E-post" value="<?php echo $log_email; ?>">* <?php echo $log_email_error; ?> <br><br>
 			<input name="log_password" type="password" placeholder="Parool" value="<?php echo $log_password; ?>">* <?php echo $log_password_error; ?> <br><br>
@@ -164,6 +185,20 @@
 		</form>
 		
 	<h2>Create user</h2>
+	
+	<?php if(isset($create_response->error)): ?>
+	
+		<p style="color:red;"> <?=$create_response->error->message;?> </p>
+		
+	<?php elseif(isset($create_response->success)): ?>
+	
+		<p style="color:green;"> <?=$create_response->success->message;?> </p>
+	
+	<?php endif; ?>
+	
+	
+	
+	
 	
 		<form action="login.php" method="post">
 			<input name="user_email" type="email" placeholder="E-post" value="<?php echo $user_email; ?>">* <?php echo $user_email_error; ?> <br><br>
