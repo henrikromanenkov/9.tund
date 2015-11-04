@@ -2,11 +2,10 @@
 	
 	require_once("function.php");
 	
-	//kui kasutaja on issse loginud; siisi suunan data.php lehele
+	//kui kasutaja on issse loginud; siis suunan data.php lehele
 	if(isset($_SESSION["logged_in_user_id"])){
 		header("Location: data.php");
 	}
-	
 	
 	//muutujad errorite jaoks
 	$log_email_error = "";
@@ -57,7 +56,7 @@
 				$hash = hash("sha512", $log_password);
 				
 				//kasutaja sisselogimise funktsioon failist function.php
-				loginUser($log_email, $hash);
+				$User->loginUser($log_email, $hash);
 				
 
 				// login if end	
@@ -95,7 +94,9 @@
 				$hash = hash("sha512", $user_password);
 				
 				//kasutaja sisselogimise funktsioon failist function.php
-				createUser($user_email, $hash);
+				// fn User klassist
+				$User->createUser($user_email, $hash);
+				
 				
 				echo "Võib kasutajat luua! Kasutajanimi on ".$user_email." ja parool on ".$user_password. "ja räsi on" .$hash;
 			
