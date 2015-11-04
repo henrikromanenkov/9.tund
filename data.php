@@ -19,10 +19,10 @@
 	
 	
 	$target_dir = "profile_pics/";
+	$target_file = $target_dir.$_SESSION["logged_in_user_id"].".jpg";
 	
 	if(isset($_POST["submit"])) {
 	
-		$target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
 		$uploadOk = 1;
 		$imageFileType = pathinfo($target_file,PATHINFO_EXTENSION);
 		// Check if image file is a actual image or fake image
@@ -58,6 +58,9 @@
 		} else {
 			if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
 				echo "The file ". basename( $_FILES["fileToUpload"]["name"]). " has been uploaded.";
+				
+				header("Location: data.php");
+				
 			} else {
 				echo "Sorry, there was an error uploading your file.";
 			}
@@ -66,19 +69,12 @@
 	}
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	if(isset($_GET["delete"])){
+		
+		unlink($target_file);
+		
+		header("Location: data.php");
+	}
 	
 	
 	
@@ -103,10 +99,54 @@
 	<a href="?logout=1"> Logi välja</a> 
 </p> 
 
-<h2> Pildi Üleslaadimine <h2>
+<h2> Profiilipilt <h2>
+
+<?php if(file_exists($target_file)):?>
+
+<div style=" 
+ width: 200px;
+ height: 200px;
+ background-image: url(<?=$target_file;?>);
+ background-position: center center;
+ background-size: cover;"></div>
+
+ <a href="?delete=1">Delete profile picture</a>
+ 
+<?php else: ?>
+
 
 <form action="data.php" method="post" enctype="multipart/form-data">
     Lae üles pilt (1MB, png, jpg, gif)
     <input type="file" name="fileToUpload" id="fileToUpload">
     <input type="submit" value="Upload Image" name="submit">
 </form>
+
+<?php endif; ?>
+
+
+<?php
+
+	$file_array = scandir($target_dir);
+	var_dump($file_array);
+	
+	
+	
+	for($i = 0; $i < count($file_array); $i++){
+		
+		echo "<a href='".$target_dir.$file_array[$i]."'>".$file_array[$i]."</a>";
+		
+	}
+?>
+
+
+
+
+
+
+
+
+
+
+
+
+
