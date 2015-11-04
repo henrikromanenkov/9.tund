@@ -62,7 +62,13 @@
 				if(isset($login_response->success)){
 					
 					//id, email
+					$_SESSION["logged_in_user_id"] = $login_response->user->id;
+					$_SESSION["logged_in_user_email"] = $login_response->user->email;
 					
+					//saadan sõnumi teise faili kasutades SESSIOONI
+					$_SESSION["login_success_message"] = $login_response->success->message;
+					
+					header("Location: data.php");
 				}
 				
 
